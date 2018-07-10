@@ -146,14 +146,11 @@ for info in transactions_clean:
 
 #Calculate total sales
 total_sales = 0
+new_sales_strip = []
 for sale in sales:
-  new_sales_strip = []
-  for symbol in sale:
-    new_sales_strip.append(float(symbol.strip("$")))
-  new_sales_strip += total_sales
+  #print(sale)
+  price = float(sale.strip("$"))
+  new_sales_strip.append(price)
  
 print(total_sales)
-    
-    
-  
-  
+
