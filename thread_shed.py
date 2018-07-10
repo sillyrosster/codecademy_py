@@ -146,21 +146,12 @@ for info in transactions_clean:
 
 #Calculate total sales
 total_sales = 0
-new_sales_stripped = []
+new_sales_strip = []
 for sale in sales:
+  #print(sale)
   price = float(sale.strip("$"))
-  new_sales_stripped.append(price)
+  new_sales_strip.append(price)
   total_sales += price
-#print(total_sales)
-
-#print(thread_sold)
-#Calculate total indv string color sales
-thread_sold_split = []
-for thread in thread_sold:
-  if len(thread) > 6:
-    thread_sold_split.append(thread.split("&"))
-  else:
-    thread_sold_split.append(thread)
-    
-print(thread_sold_split)
+ 
+print(total_sales)
 
