@@ -151,6 +151,7 @@ for sale in sales:
   #print(sale)
   price = float(sale.strip("$"))
   new_sales_strip.append(price)
+  total_sales += price
  
 print(total_sales)
 
