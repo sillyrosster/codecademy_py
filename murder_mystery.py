@@ -11,9 +11,20 @@ gregg_t_fishy_intro = """
 A most good day to you all, I am Gregg T Fishy, of the Fishy Enterprise fortune. I am 37 years young, an adventurous spirit and I've never lost my sense of childlike wonder. I do love to be in the backyard gardening and I have the most extraordinary time when I'm fishing. Fishing for what, you might find yourself asking? Why, I happen to always be fishing for compliments of course! I have a stunning pair of radiant blue eyes that will pierce the soul of anyone who dare gaze upon my countenance. I quite enjoy going on long jaunts through garden paths and short walks through greenhouses. I hope that Jay will be as absolutely interesting as he appears on the television, I find that he has some of the most curious tastes in style and humor. When I'm out and about I quite enjoy hearing tales that instill in my heart of hearts the fascination that beguiles my every day life, every fiber of my being scintillates and vascillates with extreme pleasure during one of these charming anecdotes and significantly pleases my beautiful personage. I cannot wait to enjoy being on the television program A Jay To Remember, it certainly seems like a grand time to explore life and love.
 """
 
+class TextSample:
+
+    def __init__(self, text, author):
+        self.raw_text = text
+        self.average_sentence_length = get_average_sentence_length(self.raw_text)
+        self.author = author
+        self.prepared_text = prepare_text(self.raw_text)
+        self.word_cound_frequency = build_frequency_table(prepare_text(self.raw_text))
+
+    def __repr__(self):
+        return "{author} has an average sentence length of {slength}".format(author=self.author, slength=self.average_sentence_length)
+
 def get_average_sentence_length(text):
-    replaced_text = text.replace('!', '.')
-    replaced_text = replaced_text.replace('?', '.')
+    replaced_text = text.replace('!', '.').replace('?', '.')
     split_text = replaced_text.split('.')
     # split sentence words into indv sentence lists
     split_text_list_length = []
@@ -25,6 +36,8 @@ def get_average_sentence_length(text):
         count += i
     return count/len(split_text_list_length)
 
+# print(get_average_sentence_length(myrtle_beech_intro))
+
 # breaks text down
 def prepare_text(text):
     clean_text = text.split(' ')
@@ -33,25 +46,32 @@ def prepare_text(text):
         cleaner_text.append(i.lower().strip('!').strip('?').strip(',').strip('\n'))
     return cleaner_text
 
-#prepare_text(gregg_t_fishy_intro)
+# print(prepare_text(lily_trebuchet_intro))
+
+# shows the frequency of words
+def build_frequency_table(corpus):
+    frequency_table = {}
+    for i in corpus:
+        if i not in frequency_table:
+            frequency_table[i] = 1
+        frequency_table[i] += 1
+    return frequency_table
 
 
-class TextSample:
+# print(build_frequency_table(prepare_text(gregg_t_fishy_intro)))
 
-    def __init__(self, text, author):
-        self.raw_text = text
-        self.average_sentence_length = get_average_sentence_length(self.raw_text)
-        self.author = author
+def ngram_creator(text_list):
+    prepared_text = prepare_text(text_list)
+    print(prepared_text)
 
-    def __repr__(self):
-        return "{author} has an average sentence length of {slength}".format(author=self.author, slength=self.average_sentence_length)
-    
+print(ngram_creator(murder_note))
+
 #create and print TextSample
 murderer_sample = TextSample(author="Murderer", text=murder_note)
-print(murderer_sample)
+#print(murderer_sample)
 lily_sample = TextSample(author="Lily Trebuchet", text=lily_trebuchet_intro)
-print(lily_sample)
+#print(lily_sample)
 myrtle_sample = TextSample(author="Myrtle Beech", text=myrtle_beech_intro)
-print(myrtle_sample)
+#print(myrtle_sample)
 gregg_sample = TextSample(author="Gregg T. Fishy", text=gregg_t_fishy_intro)
-print(gregg_sample)
+#print(gregg_sample)
