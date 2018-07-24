@@ -46,7 +46,7 @@ def build_frequency_table(corpus):
     return frequency_table
 
 
-print(build_frequency_table(prepare_text(murder_note)))
+# print(build_frequency_table(prepare_text(murder_note)))
 
 # N-gram the text
 def ngram_creator(text_list):
@@ -122,3 +122,5 @@ def find_text_similarity(text1, text2):
 notes = [lily_sample, myrtle_sample, gregg_sample]
 for note in notes:
     print("{author} is {similarity} similar to the murder letter.".format(author=note.author, similarity=find_text_similarity(murderer_sample, note)))
+
+print("Gregg T. Fishy dun it")
