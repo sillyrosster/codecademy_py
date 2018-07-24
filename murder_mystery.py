@@ -62,7 +62,7 @@ def build_frequency_table(corpus):
 
 def ngram_creator(text_list):
     prepared_text = prepare_text(text_list)
-    print(prepared_text)
+    
 
 print(ngram_creator(murder_note))
 
