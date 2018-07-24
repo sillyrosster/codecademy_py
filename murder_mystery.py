@@ -11,21 +11,9 @@ gregg_t_fishy_intro = """
 A most good day to you all, I am Gregg T Fishy, of the Fishy Enterprise fortune. I am 37 years young, an adventurous spirit and I've never lost my sense of childlike wonder. I do love to be in the backyard gardening and I have the most extraordinary time when I'm fishing. Fishing for what, you might find yourself asking? Why, I happen to always be fishing for compliments of course! I have a stunning pair of radiant blue eyes that will pierce the soul of anyone who dare gaze upon my countenance. I quite enjoy going on long jaunts through garden paths and short walks through greenhouses. I hope that Jay will be as absolutely interesting as he appears on the television, I find that he has some of the most curious tastes in style and humor. When I'm out and about I quite enjoy hearing tales that instill in my heart of hearts the fascination that beguiles my every day life, every fiber of my being scintillates and vascillates with extreme pleasure during one of these charming anecdotes and significantly pleases my beautiful personage. I cannot wait to enjoy being on the television program A Jay To Remember, it certainly seems like a grand time to explore life and love.
 """
 
-class TextSample:
-
-    def __init__(self, text, author):
-        self.raw_text = text
-        self.average_sentence_length = get_average_sentence_length(self.raw_text)
-        self.author = author
-        self.prepared_text = prepare_text(self.raw_text)
-        self.word_cound_frequency = build_frequency_table(prepare_text(self.raw_text))
-
-    def __repr__(self):
-        return "{author} has an average sentence length of {slength}".format(author=self.author, slength=self.average_sentence_length)
 
 def get_average_sentence_length(text):
-    replaced_text = text.replace('!', '.').replace('?', '.')
-    split_text = replaced_text.split('.')
+    split_text = text.replace('!', '.').replace('?', '.').split('.')
     # split sentence words into indv sentence lists
     split_text_list_length = []
     for i in split_text:
@@ -36,43 +24,78 @@ def get_average_sentence_length(text):
         count += i
     return count/len(split_text_list_length)
 
-# print(get_average_sentence_length(myrtle_beech_intro))
+# print(get_average_sentence_length(lily_trebuchet_intro))
 
 # breaks text down
 def prepare_text(text):
     clean_text = text.split(' ')
     cleaner_text = []
     for i in clean_text:
-        cleaner_text.append(i.lower().strip('!').strip('?').strip(',').strip('\n'))
+        cleaner_text.append(i.lower().strip(' ').replace('.', '').strip('!').strip('?').strip(',').strip('\n'))
     return cleaner_text
 
-# print(prepare_text(lily_trebuchet_intro))
+# print(prepare_text(murder_note))
 
 # shows the frequency of words
 def build_frequency_table(corpus):
     frequency_table = {}
     for i in corpus:
         if i not in frequency_table:
-            frequency_table[i] = 1
+            frequency_table[i] = 0
         frequency_table[i] += 1
     return frequency_table
 
 
-# print(build_frequency_table(prepare_text(gregg_t_fishy_intro)))
+print(build_frequency_table(prepare_text(murder_note)))
 
 # N-gram the text
-# def ngram_creator(text_list):
-    prepared_text = prepare_text(text_list)
-    
-# print(ngram_creator(murder_note))
+def ngram_creator(text_list):
+    n_gram = []
+    for word in range(0, len(text_list) - 1):
+        n_gram.append(text_list[word] + ' ' + text_list[word + 1])
+    return n_gram
+
+# print(ngram_creator(prepare_text(murder_note)))
 
 # compare two frequency tables
 def frequency_comparison(table1, table2):
-    appearances = []
-    mutual_appearances = []
-    for key in table1.keys():
-        
-print(frequency_comparison(build_frequency_table(gregg_t_fishy_intro), build_frequency_table(lily_trebuchet_intro)))
+    appearances = 0
+    mutual_appearances = 0
+    for key in table1:
+        if key in table2:
+            if table1[key] > table2[key]:
+                appearances += table1[key]
+                mutual_appearances += table2[key]
+            elif table1[key] <= table2[key]:
+                appearances += table2[key]
+                mutual_appearances += table1[key]
+        elif key not in table2:
+            appearances += table1[key]
+    for key in table2:
+        if key not in table1:
+            appearances += table2[key]
+    return mutual_appearances/appearances
+
+# print(frequency_comparison(build_frequency_table(prepare_text(gregg_t_fishy_intro)), build_frequency_table(prepare_text(murder_note))))
+
+# comparing average sentence length -- return percent difference
+def percent_difference(value1, value2):
+    return abs(value1-value2)/((value1+value2)/2)
+
+# print(percent_difference(get_average_sentence_length(murder_note), get_average_sentence_length(myrtle_beech_intro)))
+    
+class TextSample:
+
+    def __init__(self, text, author):
+        self.raw_text = text
+        self.average_sentence_length = get_average_sentence_length(self.raw_text)
+        self.author = author
+        self.prepared_text = prepare_text(self.raw_text)
+        self.word_count_frequency = build_frequency_table(prepare_text(self.raw_text))
+        self.ngram_frequency = build_frequency_table(ngram_creator(prepare_text(self.raw_text)))
+
+    def __repr__(self):
+        return "{author} has an average sentence length of {slength}".format(author=self.author, slength=self.average_sentence_length)
 
 
 #create and print TextSample
@@ -84,3 +107,18 @@ myrtle_sample = TextSample(author="Myrtle Beech", text=myrtle_beech_intro)
 #print(myrtle_sample)
 gregg_sample = TextSample(author="Gregg T. Fishy", text=gregg_t_fishy_intro)
 #print(gregg_sample)
+
+# who dun it
+def find_text_similarity(text1, text2):
+    sentence_length_difference = percent_difference(text1.average_sentence_length, text2.average_sentence_length)
+    sentence_length_similarity = abs(1 - sentence_length_difference)
+    word_count_similarity = frequency_comparison(text1.word_count_frequency, text2.word_count_frequency)
+    ngram_similarity = frequency_comparison(text1.ngram_frequency, text2.ngram_frequency)
+    return (sentence_length_similarity+word_count_similarity+ngram_similarity)/3
+
+
+# print(find_text_similarity(murderer_sample, gregg_sample))
+
+notes = [lily_sample, myrtle_sample, gregg_sample]
+for note in notes:
+    print("{author} is {similarity} similar to the murder letter.".format(author=note.author, similarity=find_text_similarity(murderer_sample, note)))
