@@ -60,11 +60,20 @@ def build_frequency_table(corpus):
 
 # print(build_frequency_table(prepare_text(gregg_t_fishy_intro)))
 
-def ngram_creator(text_list):
+# N-gram the text
+# def ngram_creator(text_list):
     prepared_text = prepare_text(text_list)
     
+# print(ngram_creator(murder_note))
 
-print(ngram_creator(murder_note))
+# compare two frequency tables
+def frequency_comparison(table1, table2):
+    appearances = []
+    mutual_appearances = []
+    for key in table1.keys():
+        
+print(frequency_comparison(build_frequency_table(gregg_t_fishy_intro), build_frequency_table(lily_trebuchet_intro)))
+
 
 #create and print TextSample
 murderer_sample = TextSample(author="Murderer", text=murder_note)
